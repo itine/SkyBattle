@@ -50,7 +50,7 @@ namespace SkyBattle_CourseProject
         private void Button2_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Выполнил ст.гр. ПРИм-117 \n" +
-                "Алексеев С.О. \n " +
+                "Алексеев С.О. \n" +
                 "Вариант №11 - воздушный бой");
         }
 
@@ -95,8 +95,8 @@ namespace SkyBattle_CourseProject
             Gl.glEnable(Gl.GL_DEPTH_TEST);
             Gl.glEnable(Gl.GL_LIGHTING);
             Gl.glEnable(Gl.GL_LIGHT0);
-            _skyTexture = new Texture("Textures\\sky.jpg");
-            _ufoTexture = new Texture("Textures\\metallic.jpeg");
+            _skyTexture = new Texture("sky.jpg");
+            _ufoTexture = new Texture("metallic.jpeg");
             timer1.Start();
         }
 
