@@ -10,8 +10,12 @@ namespace SkyBattle_CourseProject
     {
         private Camera _camera;
         private Texture _skyTexture;
-        private Texture _ufoTexture;
+        private Texture _ufoTextureFirst;
+        private Texture _ufoTextureSecond;
+        private Texture _ufoTextureThird;
         private Point _ufoCoord = new Point(2, 3, 2);
+        private Point _ufo2Coord = new Point(5, 9, 3);
+        private Point _ufo3Coord = new Point(-1, 9, 3);
         private bool isBoomed = false;
         private float _globalTime = 0;
         private float _previousTime = 0;
@@ -20,6 +24,7 @@ namespace SkyBattle_CourseProject
         private const int _angleStep = -45;
         private const int _transferStep = -10;
         private bool _randomAnimationUsed = false;
+        private float _ufoZoom = 1;
 
         public Form1()
         {
@@ -39,10 +44,10 @@ namespace SkyBattle_CourseProject
                "Поворот камеры с помощью клавиш q и e \n" +
                "Наклон с помощью x и c \n " +
                "Приближение и удаление камеры колёсиком мыши \n " +
-               "Куб можно двигать с помощью клавиш ijkl \n " +
+               "Корабль можно двигать с помощью клавиш ijkl \n " +
                "Можно его так же взровать, нажав на клавишу b \n " +
-               "Клавиши n и m реализуют масштабирование банки \n " +
-               "С помощью ползунка можно вращать куб \n " +
+               "Клавиши n и m реализуют масштабирование \n " +
+               "С помощью ползунка можно вращать корабль \n " +
                "Неконтролируемая анимация применяет все преобразования, \n" +
                "относительно времени.");
         }
@@ -66,10 +71,18 @@ namespace SkyBattle_CourseProject
                     _ufoAngle += 360;
                 _ufoAngle += _angleStep;
                 _ufoCoord = new Point(_ufoCoord.X, _ufoCoord.Y + _transferStep, _ufoCoord.Z);
+                var rnd = new Random();
+                if (rnd.NextDouble() > 0.5)
+                    _ufoZoom *= 0.5f;
+                else
+                    _ufoZoom /= 0.5f;
             }
+          
             DrawSky();
             if (!isBoomed)
                 DrawUFO();
+            DrawUFO2();
+            DrawUFO3();
             DrawBoom(_globalTime);
             DrawWindow.Invalidate();
         }
@@ -96,7 +109,9 @@ namespace SkyBattle_CourseProject
             Gl.glEnable(Gl.GL_LIGHTING);
             Gl.glEnable(Gl.GL_LIGHT0);
             _skyTexture = new Texture("sky.jpg");
-            _ufoTexture = new Texture("metallic.jpeg");
+            _ufoTextureFirst = new Texture("ufo1.jpg");
+            _ufoTextureSecond = new Texture("ufo2.jpg");
+            _ufoTextureThird = new Texture("ufo3.jpg");
             timer1.Start();
         }
 
@@ -128,11 +143,55 @@ namespace SkyBattle_CourseProject
             Gl.glEnable(Gl.GL_TEXTURE_2D);
             Gl.glEnable(Gl.GL_TEXTURE_GEN_S);
             Gl.glEnable(Gl.GL_TEXTURE_GEN_T);
-            Gl.glBindTexture(Gl.GL_TEXTURE_2D, _ufoTexture.MGlTextureObject);
+            Gl.glBindTexture(Gl.GL_TEXTURE_2D, _ufoTextureSecond.MGlTextureObject);
             Gl.glPushMatrix();
             Gl.glTranslated(_ufoCoord.X, _ufoCoord.Y, _ufoCoord.Z);
             Gl.glRotated(_ufoAngle, 0, 0, 1);
-            Glut.glutSolidTetrahedron();
+            Glut.glutSolidCone(3, 3 , 3, 3);
+            Gl.glRotated(60, 0, 0, 1);
+            Gl.glBindTexture(Gl.GL_TEXTURE_2D, _ufoTextureFirst.MGlTextureObject);
+            Glut.glutSolidCone(4, 3 , 3, 4);
+            Gl.glBindTexture(Gl.GL_TEXTURE_2D, _ufoTextureThird.MGlTextureObject);
+            Gl.glTranslated(0, 0, 3);
+            Glut.glutSolidSphere(0.25f , 20, 20);
+            Gl.glDisable(Gl.GL_TEXTURE_GEN_S);
+            Gl.glDisable(Gl.GL_TEXTURE_GEN_T);
+            Gl.glPopMatrix();
+            Gl.glFlush();
+            Gl.glDisable(Gl.GL_TEXTURE_2D);
+        }
+
+        public void DrawUFO2()
+        {
+            Gl.glClearColor(255, 255, 255, 1);
+            Gl.glLoadIdentity();
+            Gl.glEnable(Gl.GL_TEXTURE_2D);
+            Gl.glEnable(Gl.GL_TEXTURE_GEN_S);
+            Gl.glEnable(Gl.GL_TEXTURE_GEN_T);
+            Gl.glBindTexture(Gl.GL_TEXTURE_2D, _ufoTextureSecond.MGlTextureObject);
+            Gl.glPushMatrix();
+            Gl.glTranslated(_ufo2Coord.X, _ufo2Coord.Y, _ufo2Coord.Z);
+            Gl.glRotated(0, 0, 0, 1);
+            Glut.glutSolidCone(1 * _ufoZoom, 1 * _ufoZoom, 3, 3);
+            Gl.glDisable(Gl.GL_TEXTURE_GEN_S);
+            Gl.glDisable(Gl.GL_TEXTURE_GEN_T);
+            Gl.glPopMatrix();
+            Gl.glFlush();
+            Gl.glDisable(Gl.GL_TEXTURE_2D);
+        }
+
+        public void DrawUFO3()
+        {
+            Gl.glClearColor(255, 255, 255, 1);
+            Gl.glLoadIdentity();
+            Gl.glEnable(Gl.GL_TEXTURE_2D);
+            Gl.glEnable(Gl.GL_TEXTURE_GEN_S);
+            Gl.glEnable(Gl.GL_TEXTURE_GEN_T);
+            Gl.glBindTexture(Gl.GL_TEXTURE_2D, _ufoTextureSecond.MGlTextureObject);
+            Gl.glPushMatrix();
+            Gl.glTranslated(_ufo3Coord.X, _ufo3Coord.Y, _ufo3Coord.Z);
+            Gl.glRotated(0, 0, 0, 1);
+            Glut.glutSolidCone(1 * _ufoZoom,1 * _ufoZoom, 3, 3);
             Gl.glDisable(Gl.GL_TEXTURE_GEN_S);
             Gl.glDisable(Gl.GL_TEXTURE_GEN_T);
             Gl.glPopMatrix();
@@ -272,8 +331,6 @@ namespace SkyBattle_CourseProject
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.W)
-                _camera.Position = new Point(_camera.Position.X, _camera.Position.Y - 1, _camera.Position.Z);
             if (e.KeyCode == Keys.S)
                 _camera.Position = new Point(_camera.Position.X, _camera.Position.Y + 1, _camera.Position.Z);
             if (e.KeyCode == Keys.A)
@@ -298,6 +355,14 @@ namespace SkyBattle_CourseProject
             if (e.KeyCode == Keys.P)
             {
                 _ufoCoord = new Point(_ufoCoord.X, _ufoCoord.Y + _transferStep, _ufoCoord.Z);
+            }
+            if (e.KeyCode == Keys.M)
+            {
+                 _ufoZoom *= 1.5f;
+            }
+            if (e.KeyCode == Keys.N)
+            {
+                _ufoZoom /= 1.5f;
             }
             if (e.KeyCode == Keys.L)
                 _ufoCoord = new Point(_ufoCoord.X + 1, _ufoCoord.Y, _ufoCoord.Z);

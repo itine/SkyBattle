@@ -18,3 +18,4 @@ D:\University\Программирование графических прило
 D:\University\Программирование графических приложений\4 семестр\CourseProject\SkyBattle\SkyBattle_CourseProject\obj\Release\SkyBattle_CourseProject.csproj.CopyComplete
 D:\University\Программирование графических приложений\4 семестр\CourseProject\SkyBattle\SkyBattle_CourseProject\obj\Release\SkyBattle_CourseProject.exe
 D:\University\Программирование графических приложений\4 семестр\CourseProject\SkyBattle\SkyBattle_CourseProject\obj\Release\SkyBattle_CourseProject.pdb
+D:\University\Программирование графических приложений\4 семестр\CourseProject\SkyBattle\SkyBattle_CourseProject\obj\Release\SkyBattle_CourseProject.csprojAssemblyReference.cache
